@@ -68,10 +68,13 @@
 
     app.use('/proxyUrl', function proxyRequest(req, res, next) {
         console.log('Proxying request to: ', req.query.url);
+        var target_url = req.query.url;
+        var query_parameters = req.query;
+        delete query_parameters['url'];
         req.pipe(request({
-            url: req.query.url,
+            url: target_url,
             strictSSL: false,
-            qs: req.query
+            qs: query_parameters
         }).on('error', next)).pipe(res);
     });
 
